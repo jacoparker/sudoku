@@ -2,6 +2,7 @@
 /* jshint -W069, esversion:6 */
 
 let width = 500.0; let height = 500.0;
+let selected = null;
 
 window.onload = function() {
     /** @type {HTMLCanvasElement} */
@@ -14,6 +15,8 @@ window.onload = function() {
         context.save();
         context.fillStyle = "#fff";
         context.fillRect(0, 0, width, height);
+
+        if (selected) highlight(context);
 
         let col = Math.floor(mousePos['x'] / width * 9) * width / 9;
         let row = Math.floor(mousePos['y'] / height * 9) * height / 9;
@@ -29,6 +32,7 @@ window.onload = function() {
         context.save();
         context.fillStyle = "#fff";
         context.fillRect(0, 0, width, height);
+        if (selected) highlight(context);
         animate(context);
         context.restore();
     }, false);
@@ -41,30 +45,37 @@ window.onload = function() {
         let mousePos = getMousePos(board, evt);
         let col = Math.floor(mousePos['x'] / width * 9) * width / 9;
         let row = Math.floor(mousePos['y'] / height * 9) * height / 9;
+        selected = [col, row];
 
-        context.fillStyle = "#6413e880";
-        // fill in all squares in same row
-        for (let i=0; i<9; i++) {
-            context.fillRect(col, height * i / 9, width / 9, height / 9);
-            context.fillRect(width * i / 9, row, width / 9, height / 9);
-        }
-
-        let tCol = Math.floor(col / 500.0 * 3.0) * 3;  // temp col
-        let tRow = Math.floor(row / 500.0 * 3.0) * 3;  // temp col
-        for (let i=0; i<3; i++) {
-            for (let j=0; j<3; j++) {
-                context.fillRect(tCol*width/9 + i*width/9,
-                                 tRow*height/9 + j*height/9,
-                                 width / 9,
-                                 height / 9);
-            }
-        }
-
+        highlight(context);
+        context.restore();
         drawBoard(context);
         // fill in the remaining 3x3 squares
     }, false);
 
     animate(context);
+}
+
+function highlight(/** @type {CanvasRenderingContext2D} */ context) {
+    let col = selected[0];
+    let row = selected[1];
+    context.fillStyle = "#6413e880";
+    // fill in all squares in same row
+    for (let i=0; i<9; i++) {
+        context.fillRect(col, height * i / 9, width / 9, height / 9);
+        context.fillRect(width * i / 9, row, width / 9, height / 9);
+    }
+
+    let tCol = Math.floor(col / 500.0 * 3.0) * 3;  // temp col
+    let tRow = Math.floor(row / 500.0 * 3.0) * 3;  // temp col
+    for (let i=0; i<3; i++) {
+        for (let j=0; j<3; j++) {
+            context.fillRect(tCol*width/9 + i*width/9,
+                             tRow*height/9 + j*height/9,
+                             width / 9,
+                             height / 9);
+        }
+    }
 }
 
 function animate(/** @type {CanvasRenderingContext2D} */ context) {
