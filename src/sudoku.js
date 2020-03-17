@@ -80,8 +80,17 @@ window.onload = function() {
     window.addEventListener("keydown", function(evt) {
         if (evt.key < '1' || evt.key > '9') return;
         pencilCurrentCell(evt.key);
+
+        // clear board
+        context.save();
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, width, height);
+
+        highlight(context);
+        context.restore();
         drawBoard(context);
-    });
+    }, false);
+
     animate(context);
 }
 
@@ -122,12 +131,10 @@ function getMousePos(canvas, evt) {
 
 function pencilCurrentCell(input) {
     // check if a cell is selected or if selected cell is empty
-    let row = Math.floor(selected[0]/width*10);
-    let col = Math.floor(selected[1]/width*10)+1;
-    console.log(Math.floor(selected[0]/width*10)+1);
-    if (selected === null || boardVals[row][col] !== '0')
-        return;
-    if (!boardMutable[row][col])
+    let row = Math.floor(selected[0]/height*10);
+    let col = Math.floor(selected[1]/width*10);
+    console.log(row + " " + col);
+    if (selected === null || !boardMutable[row][col])
         return;
     boardVals[row][col] = input;
 }
@@ -176,9 +183,9 @@ function drawBoard(/** @type {CanvasRenderingContext2D} */ context) {
         for (let j=0; j<9; j++) {
             if (boardVals[i][j] !== '0') {
                 let col = i * width / 9;
-                let row = j * height / 9;
+                let row = j * height / 9 + height/10;
                 context.font = "30px Arial";
-                context.fillText(boardVals[i][j], col, row, width / 9.0, height / 9.0);
+                context.fillText(boardVals[i][j], col+width/27, row - height/36);
             }
         }
     }
