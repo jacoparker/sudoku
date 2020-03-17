@@ -5,27 +5,27 @@
 let width = 500.0; let height = 500.0;
 let selected = null;
 let boardVals = [
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
+    ['4', '9', '0', '1', '5', '7', '0', '0', '0'],
+    ['0', '1', '8', '0', '9', '0', '0', '0', '0'],
+    ['7', '5', '0', '2', '8', '4', '1', '0', '6'],
+    ['0', '6', '0', '4', '1', '5', '0', '7', '0'],
+    ['1', '0', '0', '7', '0', '0', '4', '0', '0'],
+    ['0', '0', '0', '9', '0', '8', '0', '6', '1'],
+    ['0', '0', '7', '5', '0', '0', '0', '1', '3'],
+    ['6', '4', '0', '0', '0', '0', '2', '0', '0'],
+    ['5', '0', '1', '0', '7', '0', '0', '8', '0'],
 ];
 
 let boardMutable = [
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
-    [true, true, true, true, true, true, true, true, true],
+    [false, false, true, false, false, false, true, true, false],
+    [true, false, false, true, false, true, true, true, true],
+    [false, false, true, false, false, false, false, true, false],
+    [true, false, true, false, false, false, true, false, true],
+    [false, true, true, false, true, true, false, true, true],
+    [true, true, true, false, true, false, true, false, false],
+    [true, true, false, false, true, true, true, false, false],
+    [false, false, true, true, true, true, false, true, true],
+    [false, true, false, true, false, true, true, false, true],
 ]
 
 window.onload = function() {
@@ -179,12 +179,14 @@ function drawBoard(/** @type {CanvasRenderingContext2D} */ context) {
         context.stroke();
     }
 
+    context.font = "30px Arial";
     for (let i=0; i<9; i++) {
         for (let j=0; j<9; j++) {
             if (boardVals[i][j] !== '0') {
                 let col = i * width / 9;
                 let row = j * height / 9 + height/10;
-                context.font = "30px Arial";
+                if (boardMutable[i][j]) context.fillStyle = "red";
+                else context.fillStyle = "black";
                 context.fillText(boardVals[i][j], col+width/27, row - height/36);
             }
         }
